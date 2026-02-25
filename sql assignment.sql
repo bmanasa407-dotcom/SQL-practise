@@ -107,3 +107,71 @@ select LPAD(order_id,6,0) order_id from orders;
 
 --Extract substring between two characters.
 select substr(customer_name, instr(lower(customer_name),'a'),instr(lower(customer_name),'e')) as sub_string from orders;
+
+-- -- NUMERICAL FUNCTIONS – 20 Questions
+
+-- 1. Round Unit_Price to 2 decimal places.
+select round(unit_price,2) as unit_price from orders;
+
+-- 2. Find total sales per order.
+select ord.*, quantity * unit_price as Total_sales from Orders ord;
+
+-- 3. Calculate average order value.
+select avg(quantity * unit_price) average_sales from Orders;
+
+-- 4. Find highest product price.
+select * from orders 
+where unit_price = (select max(unit_price) from orders);
+
+-- 5. Find lowest product price.
+select * from orders 
+where unit_price = (select min(unit_price) from orders);
+
+-- 6. Calculate percentage discount applied.
+
+
+-- 7. Find modulus of Quantity divided by 2.
+select * from orders where mod(quantity,2) = 0;
+
+-- 8. Convert negative values to positive.
+select abs(-25);
+
+-- 9. Truncate price without rounding.
+select Trunc(unit_price) as unit_price from orders;
+
+-- 10. Find square root of total sales.
+select SQRT(sum(quantity * unit_price)) as SQRT_Total_sales from Orders;
+
+-- 11. Calculate exponential value of a number.
+select EXP(2) ;
+
+-- 12. Calculate power of 2^5.
+select power(2,5); 
+
+-- 13. Find absolute difference between two prices.
+select abs(12-20);
+
+-- 14. Calculate sales growth percentage.
+select to_char(to_char(year_order ||'-'|| lead(year_order,1,0) over(order by Year_order))), ROUND(((lead(order_count,1,0) over(order by Year_order) - order_count) / order_count) * 100, 2)
+from (select extract(YEAR from order_date) Year_order, count(order_id) order_count from oe.orders
+group by Year_order order by year_order);
+
+-- 15. Find random number between 1 and 100.
+SELECT TRUNC(DBMS_RANDOM.VALUE(1, 101)) AS random_number;
+
+-- 16. Divide total sales by number of orders.
+select sum(quantity * unit_price)/count(*) as Total_sales_by_orders from Orders;
+
+-- 17. Find ceiling value of price.
+select CEIL(unit_price) ceil_unit_price from orders;
+
+-- 18. Find floor value of price.
+select floor(unit_price) floor_unit_price from orders;
+
+-- 19. Convert decimal to integer.
+select trunc(23.50);
+
+-- 20. Calculate compound interest.
+select  50000 * POWER(1 + (12 / 100) / 4, 4 * 5) - 50000 as compound_interest;
+
+--formula: principal * POWER(1 + (annual_rate / 100) / comp_per_year, comp_per_year * years) - principal
